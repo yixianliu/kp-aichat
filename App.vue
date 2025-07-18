@@ -1,40 +1,32 @@
-<template>
-	<div class="layout">
-		<el-row>
-			<el-col :span="2"></el-col>
-			<el-col :span="20">
-				<el-container>
-					<el-header>
-						<MenuView />
-					</el-header>
+<script>
+	export default {
+		onLaunch: function() {
+			console.warn('当前组件仅支持 uni_modules 目录结构 ，请升级 HBuilderX 到 3.1.0 版本以上！')
+			console.log('App Launch')
+		},
+		onShow: function() {
+			console.log('App Show')
+		},
+		onHide: function() {
+			console.log('App Hide')
+		}
+	}
+</script>
 
-					<el-main class="layout-main">
-						<router-view></router-view>
-					</el-main>
+<style lang="scss">
+	/*每个页面公共css */
+	@import '@/uni_modules/uni-scss/index.scss';
+	/* #ifndef APP-NVUE */
+	@import '@/static/customicons.css';
+	// 设置整个项目的背景色
+	page {
+		background-color: #f5f5f5;
+	}
 
-					<el-footer>
-						<el-divider />
-						<p>
-							<el-text class="mx-1">版权所有 ©1997-2025</el-text>
-							/
-							<el-text class="mx-1">
-								<router-link to="/mount">系统挂载</router-link>
-							</el-text>
-						</p>
-					</el-footer>
-				</el-container>
-			</el-col>
-			<el-col :span="2"></el-col>
-		</el-row>
-	</div>
-</template>
-
-<style scoped>
-	.layout-main {
-		min-height: 800px;
+	/* #endif */
+	.example-info {
+		font-size: 14px;
+		color: #333;
+		padding: 10px;
 	}
 </style>
-
-<script setup lang="ts">
-	import MenuView from "@/components/_Menu.vue";
-</script>
