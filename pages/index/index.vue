@@ -1,9 +1,18 @@
 <template>
 	<view class="container">
-		
-		<view class="intro">本项目已包含uni ui组件，无需import和注册，可直接使用。在代码区键入字母u，即可通过代码助手列出所有可用组件。光标置于组件名称处按F1，即可查看组件文档。</view>
-		<text class="intro">详见：</text>
-		<uni-link :href="href" :text="href"></uni-link>
+		<view class="btn-area">
+			<navigator url="navigate/navigate?title=navigate" hover-class="navigator-hover">
+				<button type="default">跳转到新页面</button>
+			</navigator>
+			<br />
+			<navigator url="redirect/redirect?title=redirect" open-type="redirect" hover-class="other-navigator-hover">
+				<button type="default">在当前页打开</button>
+			</navigator>
+			<br />
+			<navigator url="/pages/index/login" open-type="redirect" hover-class="other-navigator-hover">
+				<button type="default">跳转tab页面</button>
+			</navigator>
+		</view>
 	</view>
 </template>
 
@@ -11,13 +20,11 @@
 	export default {
 		data() {
 			return {
-				href: 'https://uniapp.dcloud.io/component/README?id=uniui'
-			}
+				href: "https://uniapp.dcloud.io/component/README?id=uniui",
+			};
 		},
-		methods: {
-
-		}
-	}
+		methods: {},
+	};
 </script>
 
 <style>
