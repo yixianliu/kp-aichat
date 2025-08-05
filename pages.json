@@ -1,24 +1,67 @@
 {
-	"pages": [{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
-		{
-			"path": "pages/index/login",
-			"style": {
-				"navigationBarTitleText": "登录"
-			}
-		}
-	],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "Kp-aichat",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8",
-		"app-plus": {
-			"background": "#efeff4"
-		}
-	}
+    "pages": [{
+            "path": "pages/index/index",
+            "style": {
+                "navigationBarTitleText": "首页"
+            }
+        },
+        {
+            "path": "pages/index/chat",
+            "style": {
+                "navigationBarTitleText": "咨询"
+            }
+        },
+        {
+            "path": "pages/index/news",
+            "style": {
+                "navigationBarTitleText": "资讯"
+            }
+        },
+        {
+            "path": "pages/index/login",
+            "style": {
+                "navigationBarTitleText": "登录"
+            }
+        }
+    ],
+    "globalStyle": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "KP-AiChat",
+        "navigationBarBackgroundColor": "#F8F8F8",
+        "backgroundColor": "#F8F8F8",
+        "app-plus": {
+            "background": "#efeff4"
+        }
+    },
+    "tabBar": {
+        "borderStyle": "black",
+        //  "backgroundColor": "#333",
+        "color": "#8F8F94",
+        "selectedColor": "#f33e54",
+        "list": [{
+                "pagePath": "pages/index/index",
+                "iconPath": "static/img/tabbar/index.png",
+                "selectedIconPath": "static/img/tabbar/indexactive.png",
+                "text": "首页"
+            },
+            {
+                "pagePath": "pages/index/chat",
+                "iconPath": "static/img/tabbar/chat.png",
+                "selectedIconPath": "static/img/tabbar/chatactive.png",
+                "text": "咨询"
+            },
+            {
+                "pagePath": "pages/index/news",
+                "iconPath": "static/img/tabbar/news.png",
+                "selectedIconPath": "static/img/tabbar/newsactive.png",
+                "text": "资讯"
+            },
+            {
+                "pagePath": "pages/user/index",
+                "iconPath": "static/img/tabbar/me.png",
+                "selectedIconPath": "static/img/tabbar/meactive.png",
+                "text": "我的"
+            }
+        ]
+    }
 }
