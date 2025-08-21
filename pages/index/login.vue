@@ -1,72 +1,168 @@
 <template>
-	<view>
-		<form @submit="formSubmit" @reset="formReset">
-			<view class="uni-form-item uni-column">
-				<view class="title">switch</view>
-				<view>
-					<switch name="switch" />
-				</view>
-			</view>
-			<view class="uni-form-item uni-column">
-				<view class="title">radio</view>
-				<radio-group name="radio">
-					<label>
-						<radio value="radio1" />
-						<text>选项一</text>
-					</label>
-					<label>
-						<radio value="radio2" />
-						<text>选项二</text>
-					</label>
-				</radio-group>
-			</view>
-			<view class="uni-form-item uni-column">
-				<view class="title">checkbox</view>
-				<checkbox-group name="checkbox">
-					<label>
-						<checkbox value="checkbox1" />
-						<text>选项一</text>
-					</label>
-					<label>
-						<checkbox value="checkbox2" />
-						<text>选项二</text>
-					</label>
-				</checkbox-group>
-			</view>
-			<view class="uni-form-item uni-column">
-				<view class="title">slider</view>
-				<slider value="50" name="slider" show-value></slider>
-			</view>
-			<view class="uni-form-item uni-column">
-				<view class="title">input</view>
-				<input class="uni-input" name="input" placeholder="这是一个输入框" />
-			</view>
-			<view class="uni-btn-v">
-				<button form-type="submit">Submit</button>
-				<button type="default" form-type="reset">Reset</button>
-			</view>
-		</form>
-	</view>
+    <view>
+        <view class="login">
+            <!-- 展示不同的排列方式 -->
+            <uni-forms ref="baseForm" :modelValue="alignmentFormData" label-position="top">
+                <uni-forms-item label="账户" required>
+                    <uni-easyinput v-model="loginForm.username" placeholder="请输入姓名" />
+                </uni-forms-item>
+                <uni-forms-item label="密码" required>
+                    <uni-easyinput v-model="loginForm.password" placeholder="请输入密码" />
+                </uni-forms-item>
+            </uni-forms>
+
+            <view class="uni-btn-v">
+                <button @click="login">登录</button>
+                <button type="default" form-type="reset">Reset</button>
+            </view>
+        </view>
+    </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				form: {
-					switch: true,
-					radio: "radio1",
-					checkbox: ["checkbox1", "checkbox2"],
-					slider: 50,
-					input: "",
-				},
-			};
-		},
-	};
+    //注意哦，Cookie.set和Cookie.get的方法都要引入js-cookie才能用哦
+    import Cookies from "js-cookie";
+    //要引入encrypt才能使用rsa算法对密码进行加密
+    import {
+        encrypt
+    } from "@/utils/rsaEncrypt.js";
+    import Config from "@/settings/setting.js";
+
+    export default {
+        data() {
+            return {
+                loginForm: {
+                    username: "",
+                    password: "",
+                    rememberMe: false,
+                    code: "",
+                    uuid: "",
+                },
+            };
+        },
+        created() {
+            // 利用生命周期钩子在页面构建之前获取验证码
+            this.getCodes();
+            // 利用生命周期钩子在页面构建之前获取用户名密码等Cookie
+            this.getCookie();
+        },
+        methods: {
+            onSubmit(e) {
+                console.log(this.baseFormData);
+                e.preventDefault();
+            },
+
+            getCodes() {
+                //调用获取验证码的接口
+                getCode().then((res) => {
+                    this.codeUrl = res.data.img;
+                    this.loginForm.uuid = res.data.uuid;
+                });
+            },
+
+            getCookie() {
+                const username = Cookies.get("username");
+                let password = Cookies.get("password");
+                const rememberMe = Cookies.get("rememberMe");
+                // 保存cookie里面的加密后的密码
+                this.cookiePass = password === undefined ? "" : password;
+                this.loginForm = {
+                    username: username === undefined ? this.loginForm.username : username,
+                    password: password === undefined ? this.loginForm.password : password,
+                    rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
+                    code: "",
+                };
+            },
+
+            login() {
+                const user = {
+                    username: this.loginForm.username,
+                    password: this.loginForm.password,
+                    rememberMe: this.loginForm.rememberMe,
+                    code: this.loginForm.code,
+                    uuid: this.loginForm.uuid,
+                };
+                //如果从cookie里面拿到的password和用户输入的不一样，就加密
+                if (user.password !== this.cookiePass) {
+                    //注意：这里我们使用了rsa非对称加密，要记得引入啊
+                    user.password = encrypt(user.password);
+                }
+                //检验填写是否规范
+                if (this.loginForm.username.length == 0 || this.loginForm.password.length == 0 || this.loginForm.code.length == 0) {
+                    //填写不规范
+                    uni.showToast({
+                        icon: "none",
+                        title: "请填写完整",
+                    });
+                    return;
+                } else {
+                    //填写规范
+                    if (user.rememberMe) {
+                        Cookies.set("username", user.username, {
+                            //这里用到了config，记得引入
+                            expires: Config.passCookieExpires,
+                        });
+                        Cookies.set("password", user.password, {
+                            //这里用到了config，记得引入
+                            expires: Config.passCookieExpires,
+                        });
+                        Cookies.set("rememberMe", user.rememberMe, {
+                            //这里用到了config，记得引入
+                            expires: Config.passCookieExpires,
+                        });
+                    } else {
+                        Cookies.remove("username");
+                        Cookies.remove("password");
+                        Cookies.remove("rememberMe");
+                    }
+
+                    // 这里使用了异步触发vuex中的Login方法，并且将user对象作为参数传入
+                    this.$store
+                        .dispatch("Login", user)
+                        .then((res) => {
+                            uni.navigateTo({
+                                url: "/pages/companyExam/companyExam?deptId=" + res.data.user.user.dept.id,
+                            });
+                        })
+                        .catch((error) => {
+                            uni.showToast({
+                                icon: "none",
+                                title: "密码或验证码不正确",
+                            });
+                            this.getCodes();
+                        });
+                }
+            },
+        },
+    };
 </script>
 
 <style>
-	.uni-form-item .title {
-		padding: 20rpx 0;
-	}
+    .login {
+        padding: 15px;
+        background-color: #fff;
+    }
+
+    .segmented-control {
+        margin-bottom: 15px;
+    }
+
+    .button-group {
+        margin-top: 15px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .form-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .button {
+        display: flex;
+        align-items: center;
+        height: 35px;
+        margin-left: 10px;
+    }
 </style>
+-

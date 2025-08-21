@@ -18,6 +18,12 @@
             }
         },
         {
+            "path": "pages/user/me",
+            "style": {
+                "navigationBarTitleText": "我的"
+            }
+        },
+        {
             "path": "pages/index/login",
             "style": {
                 "navigationBarTitleText": "登录"
@@ -57,7 +63,7 @@
                 "text": "资讯"
             },
             {
-                "pagePath": "pages/user/index",
+                "pagePath": "pages/user/me",
                 "iconPath": "static/img/tabbar/me.png",
                 "selectedIconPath": "static/img/tabbar/meactive.png",
                 "text": "我的"
