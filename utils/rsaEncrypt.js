@@ -1,6 +1,6 @@
 //jsencrypt需要引入，不同端可以采用不同的方式引入
 //uniapp端可以使用插件（查看官网使用详情），vue端可以使用 npm install jsencrypt 来引入，这里我们使用vue端来展示
-import JSEncrypt from "jsencrypt/bin/jsencrypt";
+import JSEncrypt from "jsencrypt";
 // 密钥对生成 http://web.chacuo.net/netrsakeypair
 const publicKey = "公钥";
 

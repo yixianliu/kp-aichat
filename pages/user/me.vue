@@ -3,10 +3,6 @@
 </template>
 
 <script>
-    import {
-        userInfo
-    } from "os";
-
     export default {
         data() {
             return {
@@ -14,9 +10,7 @@
             };
         },
         methods: {
-            init() {
-
-            },
+            init() {},
         },
     };
 </script>

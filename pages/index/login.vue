@@ -1,7 +1,6 @@
 <template>
     <view>
         <view class="login">
-            <!-- 展示不同的排列方式 -->
             <uni-forms ref="baseForm" :modelValue="alignmentFormData" label-position="top">
                 <uni-forms-item label="账户" required>
                     <uni-easyinput v-model="loginForm.username" placeholder="请输入姓名" />

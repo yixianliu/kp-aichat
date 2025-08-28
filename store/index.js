@@ -1,16 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
 Vue.use(Vuex);
-//引入登录的login的接口
+// 引入登录的login的接口
 import {
     login
-} from "../api/login.js";
-//引入拿token、设token、删token的方法
+} from "@/api/login.js";
+// 引入拿token、设token、删token的方法
 import {
     getToken,
     setToken,
     removeToken
-} from "../utils/auth.js";
+} from "@/utils/auth.js";
 
 const store = new Vuex.Store({
     state: {
